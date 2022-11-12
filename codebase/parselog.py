@@ -1,4 +1,4 @@
-def parse_log(f):
+def parse_log(logFile):
 
     '''
     function to parse log file
@@ -9,15 +9,15 @@ def parse_log(f):
     names = []
 
 
-    with open(f,"r") as f:
-        for line in f.readlines():
-            p= line.strip("\n")
+    with open(logFile, "r") as file:
+        for line in file.readlines():
+            p = line.strip("\n") #Please for the love of god never name your variables "s" or "p" because I have no fucking clue what the hell they are for
 
             if len(p)>1:
                 s = p.split(" ")
                 name = s[2]
                 name = name.replace(":","")
-                names .append(name)
+                names.append(name)
                 episode_watched = s[-1].split("-")[-1].split(":")[0]
                 last_episode = s[-1].split("-")[-1].split(":")[1]
 
@@ -26,15 +26,18 @@ def parse_log(f):
                     anime_last[name] = last_episode
                 else:
                     anime[name] = "finished"
-    f.close()
+    file.close()
 
     #delete duplicates if any
-    n= set(names)
-    names = list(n)
+    duplicates = set(names)
+    names = list(duplicates)
 
     #delete already finished anime
-    for i in names:
-        if anime[i] == "finished":
-            names.remove(i)
+    for finishedAnime in names:
+        if anime[finishedAnime] == "finished":
+            names.remove(finishedAnime)
 
     return anime,anime_last,names
+
+if __name__ == "__main__":
+    parse_log()
